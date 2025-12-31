@@ -1,0 +1,89 @@
+# ----------------------------------------------------------------------
+# ModelSim / QuestaSim
+# ----------------------------------------------------------------------
+# Compiled libraries and work directories
+work/
+transcript
+*.wlf
+*.mpf
+modelsim.ini
+vsim.wlf
+*.wlftemp
+
+# Coverage and log files
+*.ucdb
+*.log
+cov*/
+report*/
+
+# ----------------------------------------------------------------------
+# Verilog / VHDL Simulation Artifacts
+# ----------------------------------------------------------------------
+# Waveform dumps
+*.vcd
+*.fsdb
+*.vpd
+*.evcd
+*.trn
+*.dsn
+
+# Simulation executables (Icarus Verilog, Verilator, etc.)
+a.out
+*.vvp
+sim_build/
+obj_dir/
+
+# ----------------------------------------------------------------------
+# Xilinx Vivado (Optional - if you use Xilinx tools)
+# ----------------------------------------------------------------------
+*.jou
+*.pb
+*.wdm
+*.str
+*.xpr
+.Xil/
+*.runs/
+*.sim/
+*.ip_user_files/
+*.hw/
+*.cache/
+*.ioplanning/
+*.hw_handoff/
+
+# ----------------------------------------------------------------------
+# Intel (Altera) Quartus (Optional - if you use Intel tools)
+# ----------------------------------------------------------------------
+db/
+incremental_db/
+simulation/
+*.qpf
+*.qsf
+*.sof
+*.pof
+*.smsg
+*.summary
+*.jdi
+*.pin
+*.done
+
+# ----------------------------------------------------------------------
+# General IDE & OS Files
+# ----------------------------------------------------------------------
+# VS Code
+.vscode/
+
+# JetBrains / IntelliJ
+.idea/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Backup files
+*.bak
+
+*.mti
+
+*.vstf
