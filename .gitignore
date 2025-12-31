@@ -10,6 +10,7 @@ modelsim.ini
 vsim.wlf
 *.wlftemp
 
+
 # Coverage and log files
 *.ucdb
 *.log
@@ -87,3 +88,6 @@ Thumbs.db
 *.mti
 
 *.vstf
+
+
+*.jpg
