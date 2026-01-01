@@ -137,7 +137,7 @@ module CpuController (
             ST_BRANCH: begin
                 ALUSrcA = 2'b10;
                 ALUSrcB = 2'b00;
-                aluOp = 3'b100;
+                aluOp = 3'b001;
 
                 PCSrc = 2'b10;
                 Branch = 1'b1;
@@ -151,7 +151,7 @@ module CpuController (
             ST_STORE: begin
                 ImmSrc = 2'b00;
                 ALUSrcB = 2'b10;
-                aluOp = 3'b100;
+                aluOp = 3'b110;
 
                 AdrSrc = 1'b1;
                 MemWrite = 1'b1;
@@ -160,7 +160,7 @@ module CpuController (
             ST_LOAD_EX: begin
                 ImmSrc  = 2'b00;
                 ALUSrcB = 2'b10;
-                aluOp   = 3'b100;
+                aluOp   = 3'b110;
             end
 
             ST_LOAD_MEM: begin
@@ -177,7 +177,7 @@ module CpuController (
             ST_C_ALU: begin
                 ALUSrcA = 2'b10;
                 ALUSrcB = 2'b00;
-                aluOp   = 3'b100;
+                aluOp   = 3'b111;
             end
 
             ST_C_WB: begin
