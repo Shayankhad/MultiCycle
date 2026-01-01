@@ -63,12 +63,14 @@ module Datapath (
 
     MDR_Register mdr (
         .clk(clk),
+        .en(MDRWrite),  
         .DataIn(ReadData),
         .DataOut(Data)
     );
 
     GenericReg #(12) oldpc_reg_en (
         .clk(clk),
+        .en(OldPCWrite),
         .d(PC),
         .q(OldPC)
     );
@@ -91,12 +93,14 @@ module Datapath (
 
     GenericReg #(16) regA (
         .clk(clk),
+        .en(1'b1),    
         .d(RD1),
         .q(A)
     );
 
     GenericReg #(16) regB (
         .clk(clk),
+        .en(1'b1),     
         .d(RD2),
         .q(B)
     );
