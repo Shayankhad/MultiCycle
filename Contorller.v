@@ -25,7 +25,6 @@ module CpuController (
     output reg OldPCWrite,
     output reg MDRWrite,
 
-    // ✅ NEW: latch enables for A/B regs in datapath
     output reg AWrite,
     output reg BWrite,
 
@@ -42,7 +41,6 @@ module CpuController (
         ST_C_WB      = 4'd4,
         ST_JUMP      = 4'd5,
 
-        // ✅ STORE must be 2 cycles (because Adr comes from ALUOut reg)
         ST_STORE_EX  = 4'd6,
         ST_STORE_MEM = 4'd7,
 
@@ -79,8 +77,8 @@ module CpuController (
                     4'b0100: ns = ST_BRANCH;
                     4'b1000: ns = ST_C_ALU;
                     4'b0010: ns = ST_JUMP;
-                    4'b0001: ns = ST_STORE_EX;  // ✅ store
-                    4'b0000: ns = ST_LOAD_EX;   // load
+                    4'b0001: ns = ST_STORE_EX; 
+                    4'b0000: ns = ST_LOAD_EX;   
                     4'b1100,
                     4'b1101,
                     4'b1110,
@@ -109,7 +107,6 @@ module CpuController (
     end
 
     always @(*) begin
-        // defaults
         AdrSrc     = 1'b0;
         MemWrite   = 1'b0;
         IRWrite    = 1'b0;
@@ -137,12 +134,12 @@ module CpuController (
         case (ps)
 
             ST_IF: begin
-                AdrSrc   = 1'b0;   // Adr = PC
+                AdrSrc   = 1'b0;  
                 IRWrite  = 1'b1;
 
-                ALUSrcA  = 2'b00;  // PC
-                ALUSrcB  = 2'b01;  // +1
-                aluOp    = 3'b000; // ADD
+                ALUSrcA  = 2'b00; 
+                ALUSrcB  = 2'b01; 
+                aluOp    = 3'b000; 
 
                 PCSrc    = 2'b00;
                 PCWrite  = 1'b1;
@@ -150,18 +147,17 @@ module CpuController (
                 OldPCWrite = 1'b1;
             end
 
-            // ✅ latch A/B only in decode
             ST_ID: begin
                 AWrite = 1'b1;
                 BWrite = 1'b1;
             end
 
             ST_BRANCH: begin
-                ALUSrcA = 2'b10;   // A (R0)
-                ALUSrcB = 2'b00;   // B (Ri)
-                aluOp   = 3'b001;  // SUB => Zero
+                ALUSrcA = 2'b10;  
+                ALUSrcB = 2'b00;   
+                aluOp   = 3'b001;  
 
-                PCSrc   = 2'b10;   // BranchTarget
+                PCSrc   = 2'b10;  
                 Branch  = 1'b1;
             end
 
@@ -170,22 +166,21 @@ module CpuController (
                 PCWrite = 1'b1;
             end
 
-            // ✅ STORE in 2 cycles
             ST_STORE_EX: begin
                 ImmSrc  = 2'b00;
-                ALUSrcB = 2'b10;   // ImmExt
-                aluOp   = 3'b110;  // pass In2 => ALUOut <= adr12
+                ALUSrcB = 2'b10;   
+                aluOp   = 3'b110; 
             end
 
             ST_STORE_MEM: begin
-                AdrSrc   = 1'b1;   // Adr = ALUOut
-                MemWrite = 1'b1;   // M[Adr] <= A (latched R0 from ID!)
+                AdrSrc   = 1'b1;  
+                MemWrite = 1'b1;   
             end
 
             ST_LOAD_EX: begin
                 ImmSrc  = 2'b00;
                 ALUSrcB = 2'b10;
-                aluOp   = 3'b110;  // ALUOut <= adr12
+                aluOp   = 3'b110; 
             end
 
             ST_LOAD_MEM: begin
@@ -194,19 +189,18 @@ module CpuController (
             end
 
             ST_LOAD_WB: begin
-                ResultSrc = 1'b1;  // MDR
-                A3Src     = 1'b0;  // write R0
+                ResultSrc = 1'b1; 
+                A3Src     = 1'b0;  
                 RegWrite  = 1'b1;
             end
 
             ST_C_ALU: begin
-                ALUSrcA = 2'b10;   // A (R0)
-                ALUSrcB = 2'b00;   // B (Ri)
-                aluOp   = 3'b111;  // decode func
+                ALUSrcA = 2'b10;  
+                ALUSrcB = 2'b00;   
+                aluOp   = 3'b111;  
             end
 
             ST_C_WB: begin
-                // ✅ Keep decoding func during WB so moveTo/noOp are correct here too
                 aluOp     = 3'b111;
 
                 ResultSrc = 1'b0;
@@ -220,10 +214,10 @@ module CpuController (
                 ALUSrcB = 2'b10;
 
                 case (opcode)
-                    4'b1100: aluOp = 3'b000; // ADDI
-                    4'b1101: aluOp = 3'b001; // SUBI
-                    4'b1110: aluOp = 3'b010; // ANDI
-                    4'b1111: aluOp = 3'b011; // ORI
+                    4'b1100: aluOp = 3'b000;
+                    4'b1101: aluOp = 3'b001; 
+                    4'b1110: aluOp = 3'b010; 
+                    4'b1111: aluOp = 3'b011; 
                     default: aluOp = 3'b000;
                 endcase
             end
