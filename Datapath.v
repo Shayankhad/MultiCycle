@@ -44,7 +44,7 @@ module Datapath (
     );
 
 
-    assign Adr = (AdrSrc) ? ALUOut[11:0] : PC;
+    assign Adr = (AdrSrc) ? Instr[11:0] : PC;
 
     Memory mem (
         .clk(clk),
