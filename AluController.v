@@ -1,14 +1,13 @@
 module AluController (
-    input  wire [3:0] Op,          // Instruction opcode (IR[15:12])
-    input  wire [8:0] Func,        // Func field for Type-C instructions
-    output reg  [2:0] ALUControl,  // Control signal sent to ALU
-    output reg isMoveTo,     // Asserted for MoveTo (Ri <- R0)
-    output reg isNop         // Asserted for NOP instruction
+    input  wire [3:0] Op,         
+    input  wire [8:0] Func,       
+    output reg  [2:0] ALUControl,  
+    output reg isMoveTo,     
+    output reg isNop         
 );
 
     always @(*) begin
-        // Default safe values
-        ALUControl = 3'b000;   // Default operation: ADD
+        ALUControl = 3'b000;   
         isMoveTo   = 1'b0;
         isNop      = 1'b0;
 
