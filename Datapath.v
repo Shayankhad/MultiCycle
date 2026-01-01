@@ -37,10 +37,12 @@ module Datapath (
 
     PC_Register pc_reg (
         .clk(clk),
+        .reset(reset),     
         .PCWrite(PCWrite),
         .PCNext(PCNext),
         .PC(PC)
     );
+
 
     assign Adr = (AdrSrc) ? ALUOut[11:0] : PC;
 
