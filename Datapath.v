@@ -105,7 +105,7 @@ module Datapath (
     GenericReg #(16) regA (
         .clk(clk),
         .reset(reset),
-        .en(AWrite),      // or 1'b1 if you haven't added AWrite yet
+        .en(AWrite),      
         .d(RD1),
         .q(A)
     );
@@ -113,7 +113,7 @@ module Datapath (
     GenericReg #(16) regB (
         .clk(clk),
         .reset(reset),
-        .en(BWrite),      // or 1'b1 if you haven't added BWrite yet
+        .en(BWrite),      
         .d(RD2),
         .q(B)
     );
