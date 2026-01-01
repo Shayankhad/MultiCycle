@@ -56,6 +56,7 @@ module Datapath (
 
     IR_Register ir (
         .clk(clk),
+        .reset(reset),     
         .IRWrite(IRWrite),
         .InstrIn(ReadData),
         .Instr(Instr)
@@ -63,6 +64,7 @@ module Datapath (
 
     MDR_Register mdr (
         .clk(clk),
+        .reset(reset),     
         .en(MDRWrite),  
         .DataIn(ReadData),
         .DataOut(Data)
@@ -70,6 +72,7 @@ module Datapath (
 
     GenericReg #(12) oldpc_reg_en (
         .clk(clk),
+        .reset(reset),     
         .en(OldPCWrite),
         .d(PC),
         .q(OldPC)
@@ -137,6 +140,7 @@ module Datapath (
 
     ALUOutReg alu_out_reg (
         .clk(clk),
+        .reset(reset),     
         .alu_result_wire(ALUResult),
         .alu_out_reg(ALUOut)
     );
