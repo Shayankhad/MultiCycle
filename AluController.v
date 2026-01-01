@@ -1,93 +1,73 @@
 module AluController (
-    input  wire [3:0] Op,         
-    input  wire [8:0] Func,       
-    output reg  [2:0] ALUControl,  
-    output reg isMoveTo,     
-    output reg isNop         
+    input  wire [2:0] aluOp,
+    input  wire [8:0] func,
+    output reg  [2:0] aluOpc,
+    output reg        noOp,
+    output reg        moveTo
 );
 
     always @(*) begin
-        ALUControl = 3'b000;   
-        isMoveTo   = 1'b0;
-        isNop      = 1'b0;
+        aluOpc = 3'b000; 
+        noOp   = 1'b0;
+        moveTo = 1'b0;
 
-        case (Op)
+        if (aluOp != 3'b111) begin
+            aluOpc = aluOp;
+        end
+        else begin
+            // Type-C decode using func field 
+            case (func)
+                9'b000000001: begin
+                    // MoveTo Ri : Ri <- R0
+                    aluOpc = 3'b101;  // Pass In1
+                    moveTo = 1'b1;
+                end
 
-            // ---------- Type-D (Immediate) Instructions ----------
-            // Addi: R0 <- R0 + imm
-            4'b1100: ALUControl = 3'b000;
+                9'b000000010: begin
+                    // MoveFrom Ri : R0 <- Ri
 
-            // Subi: R0 <- R0 - imm
-            4'b1101: ALUControl = 3'b001;
+                    aluOpc = 3'b110;  
+                end
 
-            // Andi: R0 <- R0 AND imm
-            4'b1110: ALUControl = 3'b010;
+                9'b000000100: begin
+                    // Add Ri : R0 <- R0 + Ri
+                    aluOpc = 3'b000;  
+                end
 
-            // Ori:  R0 <- R0 OR imm
-            4'b1111: ALUControl = 3'b011;
+                9'b000001000: begin
+                    // Sub Ri : R0 <- R0 - Ri
+                    aluOpc = 3'b001;  // SUB
+                end
 
+                9'b000010000: begin
+                    // And Ri : R0 <- R0 & Ri
+                    aluOpc = 3'b010;  // AND
+                end
 
-            // ---------- BranchZ ----------
-            // Use subtraction to compare R0 and Ri
-            // If (R0 - Ri == 0) then Zero flag will be asserted
-            4'b0100: ALUControl = 3'b001;
+                9'b000100000: begin
+                    // Or Ri : R0 <- R0 | Ri
+                    aluOpc = 3'b011;  // OR
+                end
 
+                9'b001000000: begin
+                    // Not Ri : R0 <- NOT Ri
 
-            // ---------- Load / Store / Jump ----------
-            // ALU is not really used for computation here
-            // We simply pass the input value through
-            4'b0000,            // Load
-            4'b0001,            // Store
-            4'b0010:            // Jump
-                ALUControl = 3'b101; // Pass In1
+                    aluOpc = 3'b100;  
+                end
 
+                9'b010000000: begin
+                    // Nop : No operation
+                    aluOpc = 3'b101; 
+                    noOp   = 1'b1;
+                end
 
-            // ---------- Type-C Instructions ----------
-            // Opcode = 1000, actual operation determined by Func field
-            4'b1000: begin
-                case (Func)
-
-                    // MoveTo Ri: Ri <- R0
-                    // ALU passes R0 (In1), destination is Ri
-                    9'b000000001: begin
-                        ALUControl = 3'b101; // Pass In1
-                        isMoveTo   = 1'b1;
-                    end
-
-                    // MoveFrom Ri: R0 <- Ri
-                    // ALU passes Ri (In2)
-                    9'b000000010: ALUControl = 3'b110;
-
-                    // Add Ri: R0 <- R0 + Ri
-                    9'b000000100: ALUControl = 3'b000;
-
-                    // Sub Ri: R0 <- R0 - Ri
-                    9'b000001000: ALUControl = 3'b001;
-
-                    // And Ri: R0 <- R0 AND Ri
-                    9'b000010000: ALUControl = 3'b010;
-
-                    // Or Ri: R0 <- R0 OR Ri
-                    9'b000100000: ALUControl = 3'b011;
-
-                    // Not Ri: R0 <- NOT R0
-                    9'b001000000: ALUControl = 3'b100;
-
-                    // NOP: No operation
-                    // isNop disables RegWrite in the Control Unit
-                    9'b010000000: begin
-                        ALUControl = 3'b101; // Pass In1 (harmless)
-                        isNop      = 1'b1;
-                    end
-
-                    // Default safe case
-                    default: ALUControl = 3'b000;
-                endcase
-            end
-
-            // ---------- Default ----------
-            default: ALUControl = 3'b000;
-        endcase
+                default: begin
+                    aluOpc = 3'b000;
+                    noOp   = 1'b0;
+                    moveTo = 1'b0;
+                end
+            endcase
+        end
     end
-endmodule
 
+endmodule
