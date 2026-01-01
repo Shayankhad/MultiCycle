@@ -1,0 +1,5 @@
+Instructions (program): ram[0x0000] to ram[0x0022] (35 words total)
+
+Array data (10 numbers): ram[0x0100] to ram[0x0109]
+
+Result (sum): ram[0x0110]
