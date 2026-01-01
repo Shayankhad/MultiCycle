@@ -36,7 +36,13 @@ module Datapath (
     wire [11:0] JumpTarget;
     wire [11:0] BranchTarget;
     wire [11:0] PCPlus1;
-
+    always @(posedge clk) begin
+        if (reset) begin
+        end else begin
+            $display("RF: R0=%04h R1=%04h R2=%04h R3=%04h",
+                rf.rf[0], rf.rf[1], rf.rf[2], rf.rf[3]);
+        end
+    end
     PC_Register pc_reg (
         .clk(clk),
         .reset(reset),     
@@ -74,7 +80,7 @@ module Datapath (
 
     GenericReg #(12) oldpc_reg_en (
         .clk(clk),
-        .reset(reset),     
+        .reset(reset),
         .en(OldPCWrite),
         .d(PC),
         .q(OldPC)
@@ -98,18 +104,19 @@ module Datapath (
 
     GenericReg #(16) regA (
         .clk(clk),
-        .en(AWrite),
+        .reset(reset),
+        .en(AWrite),      // or 1'b1 if you haven't added AWrite yet
         .d(RD1),
         .q(A)
     );
 
     GenericReg #(16) regB (
         .clk(clk),
-        .en(BWrite),
+        .reset(reset),
+        .en(BWrite),      // or 1'b1 if you haven't added BWrite yet
         .d(RD2),
         .q(B)
     );
-
     ImmExtend imm_ext (
         .Instr(Instr),
         .ImmSrc(ImmSrc),

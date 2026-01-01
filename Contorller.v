@@ -206,6 +206,9 @@ module CpuController (
             end
 
             ST_C_WB: begin
+                // ✅ Keep decoding func during WB so moveTo/noOp are correct here too
+                aluOp     = 3'b111;
+
                 ResultSrc = 1'b0;
                 A3Src     = moveTo ? 1'b1 : 1'b0;
                 RegWrite  = noOp   ? 1'b0 : 1'b1;
