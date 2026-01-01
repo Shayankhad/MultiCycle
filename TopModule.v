@@ -11,7 +11,7 @@ module TopModule (
     wire MemWrite;
     wire IRWrite;
     wire RegWrite;
-
+    wire AWrite, BWrite;
     wire [1:0] ALUSrcA;
     wire [1:0] ALUSrcB;
     wire [1:0] ImmSrc;
@@ -63,14 +63,17 @@ module TopModule (
         .MDRWrite(MDRWrite),
 
         .noOp(noOp),
-        .moveTo(moveTo)
+        .moveTo(moveTo),
+        .AWrite(AWrite),
+        .BWrite(BWrite)
     );
 
     // Datapath
     Datapath U_DP (
         .clk(clk),
         .reset(reset),
-
+        .AWrite(AWrite),
+        .BWrite(BWrite),
         .AdrSrc(AdrSrc),
         .MemWrite(MemWrite),
         .IRWrite(IRWrite),

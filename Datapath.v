@@ -19,6 +19,8 @@ module Datapath (
     input MDRWrite,
 
     input ResultSrc,
+    input AWrite,
+    input BWrite,
 
     output [3:0] Op,
     output [8:0] Func,
@@ -96,14 +98,14 @@ module Datapath (
 
     GenericReg #(16) regA (
         .clk(clk),
-        .en(1'b1),    
+        .en(AWrite),
         .d(RD1),
         .q(A)
     );
 
     GenericReg #(16) regB (
         .clk(clk),
-        .en(1'b1),     
+        .en(BWrite),
         .d(RD2),
         .q(B)
     );
